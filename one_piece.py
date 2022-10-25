@@ -5,6 +5,7 @@ from http.client import NETWORK_AUTHENTICATION_REQUIRED
 from multiprocessing.connection import wait
 from re import search
 from sqlite3 import paramstyle
+from tkinter import CURRENT
 from selenium import webdriver
 from time import sleep
 from selenium.webdriver.common.by import By
@@ -14,9 +15,13 @@ from selenium.common.exceptions import *
 from selenium.webdriver.common.keys import Keys
 import json
 import requests
-
+from PIL import Image
+from selenium.webdriver import ActionChains
+import pyautogui
 driver = webdriver.Chrome(executable_path="chromedriver (1).exe")
 users = []
+
+actions = ActionChains(driver)
 
 
 class InstaBot:
@@ -42,7 +47,7 @@ class InstaBot:
             By.XPATH,
             "/html/body/div[1]/div/div/div/div[1]/div/div/div/div[1]/section/main/article/div[2]/div[1]/div[2]/form/div/div[3]/button/div")
         self.username.send_keys("monkeydluffy565656")
-        self.password.send_keys("")
+        self.password.send_keys("gigolo69")
         sleep(5)
         try:
             self.go.click()
@@ -86,15 +91,15 @@ class InstaBot:
     def SendRequestedMessage(self, message):
         good = driver.find_element(
             By.XPATH, "/html/body/div[1]/div/div/div/div[1]/div/div/div/div[1]/div[1]/section/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div/div[2]/textarea")
+        good.send_keys(message)
         send = driver.find_element(
             By.XPATH, "/html/body/div[1]/div/div/div/div[1]/div/div/div/div[1]/div[1]/section/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div/div[3]/button")
-        good.send_keys(message)
         send.click()
         sleep(10)
 
     def SendMessages(self):
         for i in users:
-            if i != "teodormarciuc" and i != "radu.ady.18":
+            if i != "teodormarciuc":
                 continue
             driver.get("https://www.instagram.com/direct/new/")
             WebDriverWait(driver, 10).until(EC.element_to_be_clickable(
@@ -122,6 +127,23 @@ class InstaBot:
                 "CAN WE GEEEEET MUCH HIGHEEEEEEER..... SO HIGHHHHHH. AW AW AW AAAA")
             self.SendRequestedMessage(
                 "https://www.youtube.com/watch?v=qkZgtkIzXNM&ab_channel=JPMEMECLIPS")
+            self.SendImage()
+
+    def SendImage(self):
+        driver.get(
+            "https://static.wikia.nocookie.net/onepiece/images/b/b7/Edward_Newgate_Anime_Infobox.png/revision/latest?cb=20220926165737")
+        actions.context_click(driver.find_element(
+            By.XPATH, "/html/body/img")).perform()
+        pyautogui.moveTo(700, 670, duration=1)
+        pyautogui.click()
+        pyautogui.moveTo(60, 75)
+        pyautogui.click()
+        sleep(2)
+        pyautogui.moveTo(900, 920)
+        pyautogui.click()
+        pyautogui.hotkey('ctrl', 'v')
+        driver.find_element(
+            By.XPATH, "/html/body/div[1]/div/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[2]/div[2]/button").click()
 
 
 # Initialize Bot
