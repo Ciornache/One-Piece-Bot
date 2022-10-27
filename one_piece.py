@@ -25,10 +25,15 @@ actions = ActionChains(driver)
 
 
 class InstaBot:
+
     global users
 
-    def LogIn(self):
+    def __init__(self):
         driver.get("https://www.instagram.com/")
+        driver.maximize_window()
+
+    def LogIn(self):
+
         sleep(2)
         WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable(
@@ -99,14 +104,15 @@ class InstaBot:
 
     def SendMessages(self):
         for i in users:
-            if i != "teodormarciuc":
-                continue
             driver.get("https://www.instagram.com/direct/new/")
-            WebDriverWait(driver, 10).until(EC.element_to_be_clickable(
-                (By.XPATH, "/html/body/div[1]/div/div/div/div[2]/div/div[2]/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/button[2]")))
-            notifButton = driver.find_element(
-                By.XPATH, "/html/body/div[1]/div/div/div/div[2]/div/div[2]/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/button[2]")
-            notifButton.click()
+            try:
+                WebDriverWait(driver, 10).until(EC.element_to_be_clickable(
+                    (By.XPATH, "/html/body/div[1]/div/div/div/div[2]/div/div[2]/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/button[2]")))
+                notifButton = driver.find_element(
+                    By.XPATH, "/html/body/div[1]/div/div/div/div[2]/div/div[2]/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[3]/button[2]")
+                notifButton.click()
+            except (TimeoutException):
+                pass
             sleep(10)
             searchUser = driver.find_element(
                 By.XPATH, "/html/body/div[1]/div/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div[2]/div[1]/div/div[2]/input")
@@ -122,17 +128,19 @@ class InstaBot:
             WebDriverWait(driver, 10).until(EC.element_to_be_clickable(
                 (By.XPATH, "/html/body/div[1]/div/div/div/div[1]/div/div/div/div[1]/div[1]/section/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div/div[2]/textarea")))
             self.SendRequestedMessage(
-                "THE ONE PIECE....... THE ONE PIECE IS REAAAAAL!!!!")
+                "THE ONE PIECEEEE....... THE ONE PIECE IS REAAAAAL!!!!")
             self.SendRequestedMessage(
-                "CAN WE GEEEEET MUCH HIGHEEEEEEER..... SO HIGHHHHHH. AW AW AW AAAA")
+                "CAN WE GEEEEET MUCH HIGHEEEEEEER..... SO HIGHHHHHH..... AW AW AW AAAAHHHH")
             self.SendRequestedMessage(
                 "https://www.youtube.com/watch?v=qkZgtkIzXNM&ab_channel=JPMEMECLIPS")
-            self.SendImage()
+            self.SendImage(
+                "https://static.wikia.nocookie.net/onepiece/images/b/b7/Edward_Newgate_Anime_Infobox.png/revision/latest?cb=20220926165737")
+            sleep(3)
 
-    def SendImage(self):
-        driver.get(
-            "https://static.wikia.nocookie.net/onepiece/images/b/b7/Edward_Newgate_Anime_Infobox.png/revision/latest?cb=20220926165737")
-        actions.context_click(driver.find_element(
+    def SendImage(self, link):
+        self.driver.get(
+            "{}".format(link))
+        self.actions.context_click(driver.find_element(
             By.XPATH, "/html/body/img")).perform()
         pyautogui.moveTo(700, 670, duration=1)
         pyautogui.click()
@@ -142,8 +150,9 @@ class InstaBot:
         pyautogui.moveTo(900, 920)
         pyautogui.click()
         pyautogui.hotkey('ctrl', 'v')
-        driver.find_element(
+        self.driver.find_element(
             By.XPATH, "/html/body/div[1]/div/div/div/div[2]/div/div/div[1]/div/div[2]/div/div/div/div/div[2]/div/div/div[2]/div[2]/button").click()
+        sleep(10)
 
 
 # Initialize Bot
@@ -163,3 +172,9 @@ users = Luffy.load("usernames.json")
 
 # Send the messages
 Luffy.SendMessages()
+
+# Process Finished
+driver.close()
+
+# TO DO : Filter the users that have already received a message -> Only send to new users
+#         If a user responds back, add him back to the desired user list( send a new message : eg -> Do you wanna join my crew? :) )
